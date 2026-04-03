@@ -125,17 +125,19 @@ Set the following repository secrets before using the deployment workflow:
 
 - `DOCKER_USERNAME`
 - `DOCKER_PASSWORD`
-- `RAILWAY_TOKEN`
 
-The workflow runs on push to `main` and performs:
+- Docker image is auto-built and pushed to DockerHub on every push to `main`
+- Render deploys automatically by watching the `main` branch
+- Live API: `<your-render-url-here>`
 
-1. Tests (`pytest` + endpoint checks)
-1. Docker image build/push with tags:
+### Render Setup (one-time)
 
-- `yourdockerhubusername/banknote-auth-ml-api:latest`
-- `yourdockerhubusername/banknote-auth-ml-api:${GITHUB_SHA}`
-
-1. Railway deploy via `railway up --detach`
+1. Go to render.com -> New -> Web Service
+1. Connect this GitHub repo
+1. Build Command: `pip install -r requirements.txt`
+1. Start Command: `uvicorn app:app --host 0.0.0.0 --port 5001`
+1. Add environment variable: `MODEL_PATH=classifier.pkl`
+1. Deploy
 
 ### Run Locally with Docker
 
@@ -143,12 +145,6 @@ The workflow runs on push to `main` and performs:
 docker build -t banknote-auth-ml-api:local .
 docker run --rm -p 5001:5001 -e MODEL_PATH=classifier.pkl banknote-auth-ml-api:local
 ```
-
-### Live Endpoint
-
-Replace with your deployed Railway URL:
-
-- `https://your-app-name.up.railway.app`
 
 Tech debt: `classifier.pkl` is still committed in the repository for convenience. Move model artifacts to object storage or a model registry in production.
 
