@@ -117,6 +117,41 @@ curl -X POST "http://127.0.0.1:5001/predict" \
 - If payload key typo exists, `curtosis` is supported as fallback
 - If startup fails with model file error, set `MODEL_PATH` to your pickle file
 
+## Deployment
+
+### GitHub Secrets
+
+Set the following repository secrets before using the deployment workflow:
+
+- `DOCKER_USERNAME`
+- `DOCKER_PASSWORD`
+- `RAILWAY_TOKEN`
+
+The workflow runs on push to `main` and performs:
+
+1. Tests (`pytest` + endpoint checks)
+1. Docker image build/push with tags:
+
+- `yourdockerhubusername/banknote-auth-ml-api:latest`
+- `yourdockerhubusername/banknote-auth-ml-api:${GITHUB_SHA}`
+
+1. Railway deploy via `railway up --detach`
+
+### Run Locally with Docker
+
+```powershell
+docker build -t banknote-auth-ml-api:local .
+docker run --rm -p 5001:5001 -e MODEL_PATH=classifier.pkl banknote-auth-ml-api:local
+```
+
+### Live Endpoint
+
+Replace with your deployed Railway URL:
+
+- `https://your-app-name.up.railway.app`
+
+Tech debt: `classifier.pkl` is still committed in the repository for convenience. Move model artifacts to object storage or a model registry in production.
+
 ## License
 
 This project is licensed under the MIT License.
