@@ -1,0 +1,23 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Notebook artifacts
+.ipynb_checkpoints/
+
+# Environment and local config
+.env
+.env.*
+
+# IDE / OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
