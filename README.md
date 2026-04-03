@@ -1,4 +1,4 @@
-# Banknote Authentication ML API
+# ml-api-template
 
 End-to-end machine learning project for banknote authentication. The model is trained in a notebook and served through a FastAPI inference endpoint.
 
