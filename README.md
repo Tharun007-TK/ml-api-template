@@ -128,7 +128,15 @@ Set the following repository secrets before using the deployment workflow:
 
 - Docker image is auto-built and pushed to DockerHub on every push to `main`
 - Render deploys automatically by watching the `main` branch
-- Live API: `<your-render-url-here>`
+- Live API: `https://ml-api-template.onrender.com`
+
+### Quick Live Test
+
+```bash
+curl -X POST "https://ml-api-template.onrender.com/predict" \
+  -H "Content-Type: application/json" \
+  -d '{"variance":3.6216,"skewness":8.6661,"kurtosis":-2.8073,"entropy":-0.44699}'
+```
 
 ### Render Setup (one-time)
 
