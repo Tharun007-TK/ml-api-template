@@ -90,4 +90,8 @@ jobs:
         run: npm install -g @railway/cli
 
       - name: Deploy to Railway
-        run: railway up --detach
+        run: |
+          npm install -g @railway/cli
+          railway up --detach --service banknote-auth-ml-api
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
