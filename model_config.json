@@ -1,0 +1,8 @@
+{
+  "model_name": "Banknote Authenticator",
+  "features": ["variance", "skewness", "kurtosis", "entropy"],
+  "labels": {
+    "0": "Genuine",
+    "1": "Fake"
+  }
+}

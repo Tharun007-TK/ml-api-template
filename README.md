@@ -4,9 +4,10 @@ End-to-end machine learning project for banknote authentication. The model is tr
 
 ## Features
 
-- RandomForest-based banknote classifier
+- Model-agnostic inference API (schema-driven)
 - Anti-overfitting training configuration (depth and leaf constraints)
-- Serialized model artifact (`classifier.pkl`)
+- External model config (`model_config.json`) for features and labels
+- Serialized model artifact loaded from `MODEL_PATH` (default: `model.pkl`)
 - FastAPI prediction endpoint (`/predict`)
 - Postman-ready payload handling (JSON and `x-www-form-urlencoded`)
 
@@ -22,10 +23,10 @@ End-to-end machine learning project for banknote authentication. The model is tr
 ```text
 .
 |-- app.py
-|-- Banknote.py
 |-- modelTraining.ipynb
 |-- BankNote_Authentication.csv
-|-- classifier.pkl
+|-- model.pkl (or set MODEL_PATH)
+|-- model_config.json
 |-- requirements.txt
 |-- pyproject.toml
 ```
@@ -39,12 +40,20 @@ uv sync
 uv run python app.py
 ```
 
+If your model file has another name, set `MODEL_PATH`.
+
+```powershell
+$env:MODEL_PATH = "classifier.pkl"
+uv run python app.py
+```
+
 ### Option 2: Using pip + venv
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
+$env:MODEL_PATH = "classifier.pkl"
 python app.py
 ```
 
@@ -53,6 +62,7 @@ API runs at `http://127.0.0.1:5001`.
 ## API Endpoints
 
 - `GET /` - health/info response
+- `GET /config` - loaded model config
 - `POST /` - usage hint
 - `POST /predict` - predict banknote class
 - `GET /docs` - Swagger UI
@@ -76,6 +86,16 @@ API runs at `http://127.0.0.1:5001`.
 
 Compatibility note: `curtosis` is also accepted as an alias for older payloads.
 
+Prediction response format:
+
+```json
+{
+  "prediction": "Genuine",
+  "prediction_raw": 0,
+  "model": "Banknote Authenticator"
+}
+```
+
 ## cURL Example
 
 ```bash
@@ -95,6 +115,7 @@ curl -X POST "http://127.0.0.1:5001/predict" \
 - `422 Unprocessable Entity`: ensure Postman Body is `raw` + `JSON`
 - `Address already in use`: stop existing process on port `5001`
 - If payload key typo exists, `curtosis` is supported as fallback
+- If startup fails with model file error, set `MODEL_PATH` to your pickle file
 
 ## License
 
